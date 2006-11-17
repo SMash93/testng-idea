@@ -511,15 +511,17 @@ public class Intentions
     }
 
     public static boolean inheritsJUnitTestCase(PsiClass psiClass) {
-        while (psiClass != null) {
-            PsiClass[] supers = psiClass.getSupers();
+        PsiClass current = psiClass;
+        //handle typo where class extends itself
+        while (current != null && current != psiClass) {
+            PsiClass[] supers = current.getSupers();
             if (supers.length > 0) {
                 PsiClass parent = supers[0];
                 if ("junit.framework.TestCase".equals(parent.getQualifiedName()))
                     return true;
-                psiClass = parent;
+                current = parent;
             } else {
-                psiClass = null;
+                current = null;
             }
         }
         return false;
