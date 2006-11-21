@@ -3,7 +3,6 @@ package com.theoryinpractice.testng.model;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import com.theoryinpractice.testng.model.SourceScope;
 import com.theoryinpractice.testng.TestNGConfiguration;
 import org.jdom.Element;
 
