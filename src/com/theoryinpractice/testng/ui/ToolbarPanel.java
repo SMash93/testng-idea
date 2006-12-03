@@ -84,4 +84,13 @@ public class ToolbarPanel extends JPanel implements OccurenceNavigator
     {
         return failedTestsNavigator.getPreviousOccurenceActionName();
     }
+
+    public void dispose() {
+        scrollToSource.setResults(null);
+        scrollToSource = null;
+        expander.setResults(null);
+        expander = null;
+        failedTestsNavigator.setResults(null);
+        failedTestsNavigator = null;        
+    }
 }
