@@ -1,0 +1,6 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+testng-idea is an [http://www.jetbrains.com IntelliJ IDEA] plugin for the
+[http://www.testng.org TestNG] Java Testing framework.
