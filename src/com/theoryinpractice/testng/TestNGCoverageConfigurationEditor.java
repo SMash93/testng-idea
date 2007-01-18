@@ -25,11 +25,13 @@ public class TestNGCoverageConfigurationEditor extends CoverageConfigurable<Test
         //the next two lines are awkward for a reason, using compareTo for some reason causes a JVM class verification error!
 
         Module[] modules = configuration.getModules();
-        for (Module module : modules) {
-            LanguageLevel effectiveLanguageLevel = module.getEffectiveLanguageLevel();
-            boolean is15 = effectiveLanguageLevel != LanguageLevel.JDK_1_4 && effectiveLanguageLevel != LanguageLevel.JDK_1_3;
-            if (!is15) {
-                return false;
+        if (modules != null) {
+            for (Module module : modules) {
+                LanguageLevel effectiveLanguageLevel = module.getEffectiveLanguageLevel();
+                boolean is15 = effectiveLanguageLevel != LanguageLevel.JDK_1_4 && effectiveLanguageLevel != LanguageLevel.JDK_1_3;
+                if (!is15) {
+                    return false;
+                }
             }
         }
         return true;
