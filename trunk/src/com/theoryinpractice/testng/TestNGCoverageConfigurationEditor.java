@@ -6,14 +6,10 @@
  */
 package com.theoryinpractice.testng;
 
-import javax.swing.*;
-
 import com.intellij.execution.configurations.coverage.CoverageConfigurable;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.java.LanguageLevel;
-import org.jetbrains.annotations.NotNull;
 
 public class TestNGCoverageConfigurationEditor extends CoverageConfigurable<TestNGConfiguration>
 {
@@ -36,21 +32,5 @@ public class TestNGCoverageConfigurationEditor extends CoverageConfigurable<Test
         }
         return true;
     }
-
-    @NotNull
-    public JComponent createEditor() {
-        return super.createEditor();
-    }
-
-    public void resetEditorFrom(TestNGConfiguration configuration) {
-        super.resetEditorFrom(configuration);
-    }
-
-    public void applyEditorTo(TestNGConfiguration configuration) throws ConfigurationException {
-        super.applyEditorTo(configuration);
-    }
-
-    public void disposeEditor() {
-        super.disposeEditor();
-    }
+   
 }
