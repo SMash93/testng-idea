@@ -2,7 +2,7 @@
 <idea-plugin>
     <name>TestNG-J</name>
     <description>TestNG Integration</description>
-    <version>0.5.6</version>
+    <version>0.5.7</version>
     <vendor logo="/resources/testng.gif">Theory In Practice</vendor>
     <idea-version since-build="5594"/>
     <application-components>
@@ -36,8 +36,7 @@
     </project-components>
     <change-notes>
         <![CDATA[
-        <li>Updated to TestNG 5.5</li>
-        <li>Configuration editor uses SettingsGroup instead of the original hacky approach.</li>
+        <li>Fix for findAnnotation() bug when using a module with JSP Files.</li>
         ]]>
     </change-notes>
 </idea-plugin>
