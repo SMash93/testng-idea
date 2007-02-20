@@ -248,7 +248,7 @@ public class Intentions
             StringBuffer commentBuffer = new StringBuffer();
             commentBuffer.append("/**\n");
             commentBuffer.append(javaDocLine);
-            commentBuffer.append("\n");
+            commentBuffer.append('\n');
             commentBuffer.append(" */");
 
             commentString = commentBuffer.toString();
@@ -319,7 +319,7 @@ public class Intentions
         for (char aChar : chars) {
             if (aChar > 'A' && aChar < 'Z') {
                 if (skippedFirst) {
-                    sb.append("-");
+                    sb.append('-');
                 } else {
                     skippedFirst = true;
                 }
@@ -348,18 +348,18 @@ public class Intentions
 
             PsiNameValuePair[] attributes = annotation.getParameterList().getAttributes();
             if (attributes.length > 0) {
-                newAnnotationBuffer.append("(");
+                newAnnotationBuffer.append('(');
                 for (int i = 0; i < attributes.length; i++) {
                     PsiNameValuePair attributePair = attributes[i];
                     if (!attributePair.getName().equals(attribute)) {
                         if (i > 0) {
-                            newAnnotationBuffer.append(",");
+                            newAnnotationBuffer.append(',');
                         }
                         newAnnotationBuffer.append(attributePair.getText());
                     }
                 }
 
-                newAnnotationBuffer.append(")");
+                newAnnotationBuffer.append(')');
             }
 
             LOG.info("Replacing with new annotation: " + newAnnotationBuffer.toString());
@@ -512,14 +512,15 @@ public class Intentions
 
     public static boolean inheritsJUnitTestCase(PsiClass psiClass) {
         PsiClass current = psiClass;
-        //handle typo where class extends itself
-        while (current != null && current != psiClass) {
-            PsiClass[] supers = current.getSupers();
+        while (current != null) {
+             PsiClass[] supers = current.getSupers();
             if (supers.length > 0) {
                 PsiClass parent = supers[0];
                 if ("junit.framework.TestCase".equals(parent.getQualifiedName()))
                     return true;
                 current = parent;
+                //handle typo where class extends itself
+                if(current == psiClass) return false;
             } else {
                 current = null;
             }
@@ -527,12 +528,10 @@ public class Intentions
         return false;
     }
 
-    private static final List junitAnnotions = Arrays.asList(new String[] {
-            "org.junit.Test",
-            "org.junit.Before",
-            "org.junit.BeforeClass",
-            "org.junit.After",
-            "org.junit.AfterClass"
-    });
+    private static final List junitAnnotions = Arrays.asList("org.junit.Test",
+                                                             "org.junit.Before",
+                                                             "org.junit.BeforeClass",
+                                                             "org.junit.After",
+                                                             "org.junit.AfterClass");
 
 }

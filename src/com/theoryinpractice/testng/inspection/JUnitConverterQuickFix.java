@@ -7,6 +7,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiClass;
 import com.intellij.util.IncorrectOperationException;
 import com.theoryinpractice.testng.util.Intentions;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Hani Suleiman Date: Aug 3, 2005 Time: 3:41:50 AM
@@ -15,11 +16,12 @@ public class JUnitConverterQuickFix implements LocalQuickFix
 {
     private static final Logger LOGGER = Logger.getInstance("TestNG QuickFix");
     
+    @NotNull
     public String getName() {
         return "Convert TestCase to TestNG";
     }
 
-    public void applyFix(Project project, ProblemDescriptor descriptor) {
+    public void applyFix(@NotNull Project project, ProblemDescriptor descriptor) {
         PsiClass psiClass = (PsiClass)descriptor.getPsiElement();
         try {
             Intentions.convert(project, psiClass);
@@ -29,6 +31,7 @@ public class JUnitConverterQuickFix implements LocalQuickFix
     }
 
     //to appear in "Apply Fix" statement when multiple Quick Fixes exist
+    @NotNull
     public String getFamilyName() {
         return "TestNG";
     }
