@@ -35,6 +35,7 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
     }
 
     public void projectOpened() {
+
     }
 
     @NonNls
