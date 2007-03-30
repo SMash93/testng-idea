@@ -10,7 +10,7 @@ public class DefaultSettings implements JDOMExternalizable
 
     private String outputDirectory;
     private Map<String, String> defaultParameters = new HashMap<String, String>();
-    private Set<String> groups = new HashSet<String>();
+    private List<String> groups = new ArrayList<String>();
 
     public String getOutputDirectory() {
         return outputDirectory;
@@ -28,11 +28,11 @@ public class DefaultSettings implements JDOMExternalizable
         this.defaultParameters = defaultParameters;
     }
 
-    public Set<String> getGroups() {
+    public List<String> getGroups() {
         return groups;
     }
 
-    public void setGroups(Set<String> groups) {
+    public void setGroups(List<String> groups) {
         this.groups = groups;
     }
 
