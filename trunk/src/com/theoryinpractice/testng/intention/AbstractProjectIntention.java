@@ -23,7 +23,7 @@ public abstract class AbstractProjectIntention implements ProjectComponent, Inte
     }
 
     public void initComponent() {
-        IntentionManager.getInstance(project).addAction(this);
+        IntentionManager.getInstance().addAction(this);
     }
 
     public void disposeComponent() {
