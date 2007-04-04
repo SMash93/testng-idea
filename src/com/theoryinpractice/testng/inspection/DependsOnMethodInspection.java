@@ -64,10 +64,12 @@ public class DependsOnMethodInspection extends LocalInspectionTool
             }
 
             if (dep != null) {
-                Matcher matcher = Pattern.compile("\"([a-zA-Z1-9_\\(\\)]*)\"").matcher(dep.getValue().getText());
-                while (matcher.find()) {
-                    String methodName = matcher.group(1);
-                    checkMethodNameDependency(manager, psiClass, methodName, dep, problemDescriptors);
+                if (dep.getValue() != null) {
+                    Matcher matcher = Pattern.compile("\"([a-zA-Z1-9_\\(\\)]*)\"").matcher(dep.getValue().getText());
+                    while (matcher.find()) {
+                        String methodName = matcher.group(1);
+                        checkMethodNameDependency(manager, psiClass, methodName, dep, problemDescriptors);
+                    }
                 }
             }
         }
