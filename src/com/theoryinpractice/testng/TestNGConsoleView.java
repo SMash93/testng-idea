@@ -45,6 +45,10 @@ public class TestNGConsoleView implements ConsoleView
         return testNGResults.getMain();
     }
 
+    public void rebuildTree() {
+        testNGResults.rebuildTree();
+    }
+
     public TestNGConsoleProperties getConsoleProperties() {
         return consoleProperties;
     }

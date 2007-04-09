@@ -30,8 +30,13 @@ public class ResultTreeRenderer extends ColoredTreeCellRenderer
             if (node == tree.getModel().getRoot()) {
                 TreeRootNode root = (TreeRootNode) proxy;
                 if (node.getChildCount() == 0) {
-                    setIcon(Animator.getCurrentFrame());
-                    append("Instantiating tests... ", SimpleTextAttributes.REGULAR_ATTRIBUTES);
+                    if (root.isInProgress()) {
+                        setIcon(Animator.getCurrentFrame());
+                        append("Instantiating tests... ", SimpleTextAttributes.REGULAR_ATTRIBUTES);
+                    } else {
+                        setIcon(PoolOfTestIcons.PASSED_ICON);
+                        append("All Tests Passed.", SimpleTextAttributes.REGULAR_ATTRIBUTES);
+                    }
                 } else {
                     setIcon(root.isInProgress() ? Animator.getCurrentFrame() : getIcon(proxy));
                     append(root.isInProgress() ? "Running tests..." : "Test Results", SimpleTextAttributes.REGULAR_ATTRIBUTES);
