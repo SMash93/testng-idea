@@ -2,7 +2,7 @@
 <idea-plugin>
     <name>TestNG-J</name>
     <description>TestNG Integration</description>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <vendor logo="/resources/testng.gif">Theory In Practice</vendor>
     <idea-version since-build="5594"/>
     <application-components>
@@ -36,8 +36,7 @@
     </project-components>
     <change-notes>
         <![CDATA[
-            Fixed problem with quotes in output directory and source directory, new
-            inspections for dependsOnMethods and dependsOnGroups.
+            Fixed problem with ClassNotFound under IDEA 6.0.5.
         ]]>
     </change-notes>
 </idea-plugin>
