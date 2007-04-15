@@ -37,10 +37,16 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
 
     public TestNGDefaultConfigurationComponent(Project project, ReferenceProvidersRegistry registry) {
         this.project = project;
-        registry.registerReferenceProvider(new TestAnnotationFilter(), PsiLiteralExpression.class, new PsiReferenceProviderBase() {
+        registry.registerReferenceProvider(new TestAnnotationFilter("dependsOnMethods"), PsiLiteralExpression.class, new PsiReferenceProviderBase() {
             @NotNull
             public PsiReference[] getReferencesByElement(PsiElement element) {
                 return new MethodReference[]{new MethodReference((PsiLiteralExpression)element, false)};
+            }
+        });
+        registry.registerReferenceProvider(new TestAnnotationFilter("dependsOnGroups"), PsiLiteralExpression.class, new PsiReferenceProviderBase() {
+            @NotNull
+            public PsiReference[] getReferencesByElement(PsiElement element) {
+                return new GroupReference[]{new GroupReference(TestNGDefaultConfigurationComponent.this, (PsiLiteralExpression)element, false)};
             }
         });
     }
@@ -153,13 +159,49 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
             return list.toArray();
         }
     }
-    
-    private static class TestAnnotationFilter implements ElementFilter
-    {
+
+    private static class GroupReference extends PsiReferenceBase<PsiLiteralExpression> {
+
+        private TestNGDefaultConfigurationComponent configurationComponent;
+
+        public GroupReference(TestNGDefaultConfigurationComponent configurationComponent, PsiLiteralExpression element, boolean soft) {
+            super(element, soft);
+            this.configurationComponent = configurationComponent;
+        }
+
+        @Nullable
+        public PsiElement resolve() {
+            return null;
+        }
+
+        public Object[] getVariants() {
+            List<Object> list = new ArrayList<Object>();
+
+            List<String> groups = configurationComponent.getDefaultSettings().getGroups();
+            for (String groupName : groups) {
+                list.add(LookupValueFactory.createLookupValue(groupName, null));
+            }
+
+            if (!list.isEmpty()) {
+                return list.toArray();
+            } else {
+                return null;
+            }
+        }
+    }
+
+    private static class TestAnnotationFilter implements ElementFilter {
+
+        private String parameterName;
+
+        public TestAnnotationFilter(String parameterName) {
+            this.parameterName = parameterName;
+        }
+
         public boolean isAcceptable(Object element, PsiElement context) {
             PsiNameValuePair pair = PsiTreeUtil.getParentOfType(context, PsiNameValuePair.class);
             if(pair == null) return false;
-            if(!pair.getName().equals("dependsOnMethods")) return false;
+            if(!pair.getName().equals(parameterName)) return false;
             PsiAnnotation annotation = PsiTreeUtil.getParentOfType(pair, PsiAnnotation.class);
             if(annotation == null) return false;
             if(!TestNGUtil.isTestNGAnnotation(annotation)) return false;
