@@ -6,21 +6,22 @@
  */
 package com.theoryinpractice.testng;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 
+import com.intellij.codeInsight.lookup.LookupValueFactory;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.*;
-import com.intellij.psi.impl.source.resolve.reference.*;
-import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.psi.filters.ElementFilter;
+import com.intellij.psi.impl.source.resolve.reference.PsiReferenceProviderBase;
+import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.codeInsight.lookup.LookupValueFactory;
+import com.intellij.psi.util.PsiUtil;
 import com.theoryinpractice.testng.ui.defaultsettings.DefaultSettings;
 import com.theoryinpractice.testng.ui.defaultsettings.DefaultSettingsPanel;
 import com.theoryinpractice.testng.util.TestNGUtil;
@@ -37,16 +38,18 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
 
     public TestNGDefaultConfigurationComponent(Project project, ReferenceProvidersRegistry registry) {
         this.project = project;
-        registry.registerReferenceProvider(new TestAnnotationFilter("dependsOnMethods"), PsiLiteralExpression.class, new PsiReferenceProviderBase() {
+        registry.registerReferenceProvider(new TestAnnotationFilter("dependsOnMethods"), PsiLiteralExpression.class, new PsiReferenceProviderBase()
+        {
             @NotNull
             public PsiReference[] getReferencesByElement(PsiElement element) {
-                return new MethodReference[]{new MethodReference((PsiLiteralExpression)element, false)};
+                return new MethodReference[] {new MethodReference((PsiLiteralExpression) element, false)};
             }
         });
-        registry.registerReferenceProvider(new TestAnnotationFilter("dependsOnGroups"), PsiLiteralExpression.class, new PsiReferenceProviderBase() {
+        registry.registerReferenceProvider(new TestAnnotationFilter("dependsOnGroups"), PsiLiteralExpression.class, new PsiReferenceProviderBase()
+        {
             @NotNull
             public PsiReference[] getReferencesByElement(PsiElement element) {
-                return new GroupReference[]{new GroupReference(TestNGDefaultConfigurationComponent.this, (PsiLiteralExpression)element, false)};
+                return new GroupReference[] {new GroupReference(TestNGDefaultConfigurationComponent.this, (PsiLiteralExpression) element, false)};
             }
         });
     }
@@ -120,7 +123,8 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
         defaultSettings.writeExternal(element);
     }
 
-    private static class MethodReference extends PsiReferenceBase<PsiLiteralExpression> {
+    private static class MethodReference extends PsiReferenceBase<PsiLiteralExpression>
+    {
 
         public MethodReference(PsiLiteralExpression element, boolean soft) {
             super(element, soft);
@@ -132,12 +136,12 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
             PsiMethod[] methods = cls.getMethods();
             String val = getValue();
             int hackIndex = val.indexOf("IntellijIdeaRulezzz ");
-            if(hackIndex > -1) {
+            if (hackIndex > -1) {
                 val = val.substring(0, hackIndex) + val.substring(hackIndex + 1, val.length());
             }
             for (PsiMethod method : methods) {
-                if(TestNGUtil.hasTest(method)) {
-                    if(method.getName().equals(val)) {
+                if (TestNGUtil.hasTest(method)) {
+                    if (method.getName().equals(val)) {
                         return method;
                     }
                 }
@@ -151,8 +155,8 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
             PsiMethod current = PsiTreeUtil.getParentOfType(getElement(), PsiMethod.class);
             PsiMethod[] methods = cls.getMethods();
             for (PsiMethod method : methods) {
-                if(current != null && method.getName().equals(current.getName())) continue;
-                if(TestNGUtil.hasTest(method) || TestNGUtil.hasConfig(method)) {
+                if (current != null && method.getName().equals(current.getName())) continue;
+                if (TestNGUtil.hasTest(method) || TestNGUtil.hasConfig(method)) {
                     list.add(LookupValueFactory.createLookupValue(method.getName(), null));
                 }
             }
@@ -160,7 +164,8 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
         }
     }
 
-    private static class GroupReference extends PsiReferenceBase<PsiLiteralExpression> {
+    private static class GroupReference extends PsiReferenceBase<PsiLiteralExpression>
+    {
 
         private TestNGDefaultConfigurationComponent configurationComponent;
 
@@ -190,21 +195,25 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
         }
     }
 
-    private static class TestAnnotationFilter implements ElementFilter {
+    private static class TestAnnotationFilter implements ElementFilter
+    {
 
         private String parameterName;
 
-        public TestAnnotationFilter(String parameterName) {
+        public TestAnnotationFilter(@NotNull String parameterName) {
+            if (parameterName == null) {
+                throw new IllegalArgumentException("parameterName must not be null");
+            }
             this.parameterName = parameterName;
         }
 
         public boolean isAcceptable(Object element, PsiElement context) {
             PsiNameValuePair pair = PsiTreeUtil.getParentOfType(context, PsiNameValuePair.class);
-            if(pair == null) return false;
-            if(!pair.getName().equals(parameterName)) return false;
+            if (null == pair) return false;
+            if (!parameterName.equals(pair.getName())) return false;
             PsiAnnotation annotation = PsiTreeUtil.getParentOfType(pair, PsiAnnotation.class);
-            if(annotation == null) return false;
-            if(!TestNGUtil.isTestNGAnnotation(annotation)) return false;
+            if (annotation == null) return false;
+            if (!TestNGUtil.isTestNGAnnotation(annotation)) return false;
             return true;
         }
 
