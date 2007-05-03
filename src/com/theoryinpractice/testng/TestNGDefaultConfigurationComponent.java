@@ -45,6 +45,13 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
                 return new MethodReference[] {new MethodReference((PsiLiteralExpression) element, false)};
             }
         });
+        registry.registerReferenceProvider(new TestAnnotationFilter("groups"), PsiLiteralExpression.class, new PsiReferenceProviderBase()
+        {
+            @NotNull
+            public PsiReference[] getReferencesByElement(PsiElement element) {
+                return new GroupReference[] {new GroupReference(TestNGDefaultConfigurationComponent.this, (PsiLiteralExpression) element, false)};
+            }
+        });
         registry.registerReferenceProvider(new TestAnnotationFilter("dependsOnGroups"), PsiLiteralExpression.class, new PsiReferenceProviderBase()
         {
             @NotNull
