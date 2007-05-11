@@ -107,16 +107,23 @@ public class TestNGDefaultConfigurationComponent implements ProjectComponent, Co
         return defaultSettingsPanel.getMainPanel();
     }
 
+    public DefaultSettingsPanel getDefaultSettingsPanel() {
+        if (defaultSettingsPanel == null) {
+            defaultSettingsPanel = new DefaultSettingsPanel(project);
+        }
+        return defaultSettingsPanel;
+    }
+
     public boolean isModified() {
         return true;
     }
 
     public void apply() throws ConfigurationException {
-        defaultSettingsPanel.getData(defaultSettings);
+        getDefaultSettingsPanel().getData(defaultSettings);
     }
 
     public void reset() {
-        defaultSettingsPanel.setData(defaultSettings);
+        getDefaultSettingsPanel().setData(defaultSettings);
     }
 
     public void disposeUIResources() {
